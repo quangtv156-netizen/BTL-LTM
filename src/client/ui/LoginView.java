@@ -18,7 +18,7 @@ public class LoginView {
     private final TextField usernameField = new TextField();
     private final PasswordField passwordField = new PasswordField();
     private final Label errorLabel = new Label();
-    private final Button connectBtn = new Button("Dang nhap");
+    private final Button connectBtn = new Button("Đăng nhập");
 
     public LoginView(ClientApp app) {
         this.app = app;
@@ -35,11 +35,11 @@ public class LoginView {
 
         grid.add(new Label("Server:"), 0, 0);
         grid.add(hostField, 1, 0);
-        grid.add(new Label("Cong:"), 0, 1);
+        grid.add(new Label("Cổng:"), 0, 1);
         grid.add(portField, 1, 1);
-        grid.add(new Label("Ten dang nhap:"), 0, 2);
+        grid.add(new Label("Tên đăng nhập:"), 0, 2);
         grid.add(usernameField, 1, 2);
-        grid.add(new Label("Mat khau:"), 0, 3);
+        grid.add(new Label("Mật khẩu:"), 0, 3);
         grid.add(passwordField, 1, 3);
 
         errorLabel.getStyleClass().add("error-label");
@@ -51,7 +51,7 @@ public class LoginView {
 
         Scene scene = new Scene(grid, 360, 260);
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-        stage.setTitle("Barricade Game - Dang nhap");
+        stage.setTitle("Barricade Game - Đăng nhập");
         stage.setScene(scene);
         stage.setResizable(false);
     }
@@ -65,11 +65,11 @@ public class LoginView {
         try {
             port = Integer.parseInt(portField.getText().trim());
         } catch (NumberFormatException e) {
-            errorLabel.setText("Cong khong hop le.");
+            errorLabel.setText("Cổng không hợp lệ.");
             return;
         }
         if (username.isEmpty() || password.isEmpty()) {
-            errorLabel.setText("Vui long nhap day du thong tin.");
+            errorLabel.setText("Vui lòng nhập đầy đủ thông tin.");
             return;
         }
         connectBtn.setDisable(true);

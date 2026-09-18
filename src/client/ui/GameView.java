@@ -41,8 +41,8 @@ public class GameView {
     private final TextField chatInput = new TextField();
     private final ToggleGroup modeGroup = new ToggleGroup();
     private final RadioButton moveRadio = new RadioButton("Di chuyen");
-    private final RadioButton hRadio = new RadioButton("Dat barricade ngang (H)");
-    private final RadioButton vRadio = new RadioButton("Dat barricade doc (V)");
+    private final RadioButton hRadio = new RadioButton("Đặt barricade ngang (H)");
+    private final RadioButton vRadio = new RadioButton("Đặt barricade dọc (V)");
 
     private Timeline countdownTimeline;
     private int secondsLeft;
@@ -71,9 +71,9 @@ public class GameView {
     private void onCloseRequest(WindowEvent event) {
         event.consume();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                "Dong cua so se tinh la dau hang tran nay. Tiep tuc?", ButtonType.YES, ButtonType.NO);
+                "Đóng cửa sổ sẽ tính là đầu hàng trận này. Tiếp tục?", ButtonType.YES, ButtonType.NO);
         alert.setHeaderText(null);
-        alert.setTitle("Xac nhan thoat");
+        alert.setTitle("Xác nhận thoát");
         styleAlert(alert);
         if (alert.showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
             app.getConnection().send(new Message(MessageType.SURRENDER).put("matchId", matchId));
@@ -112,10 +112,10 @@ public class GameView {
         hRadio.setOnAction(e -> boardCanvas.setMode("H"));
         vRadio.setOnAction(e -> boardCanvas.setMode("V"));
 
-        Button surrenderBtn = new Button("Dau hang");
+        Button surrenderBtn = new Button("Đầu hàng");
         surrenderBtn.setOnAction(e -> surrender());
 
-        TitledPane modePane = new TitledPane("Che do thao tac",
+        TitledPane modePane = new TitledPane("Chế độ thao tác",
                 new VBox(6, moveRadio, hRadio, vRadio, surrenderBtn));
         modePane.setCollapsible(false);
 
@@ -132,14 +132,14 @@ public class GameView {
         root.setRight(right);
         BorderPane.setMargin(right, new Insets(0, 0, 0, 10));
 
-        Label hint = new Label("Che do 'Di chuyen': click o ke ben canh quan de di. Che do Barricade: ren chuot de xem preview, click de dat.");
+        Label hint = new Label("Chế độ 'Di chuyển': click ô kế bên cạnh quân để di chuyển. Chế độ Barricade: rê chuột để xem preview, click để đặt.");
         root.setBottom(hint);
         BorderPane.setMargin(hint, new Insets(10, 0, 0, 0));
 
         Scene scene = new Scene(root, 760, 640);
         scene.getStylesheets().add(getClass().getResource(CSS).toExternalForm());
         stage.setScene(scene);
-        stage.setTitle("Barricade Game - Dau voi " + opponent);
+        stage.setTitle("Barricade Game - Đấu với " + opponent);
     }
 
     public void resetForNewMatch(String matchId, String opponent, int mySymbol) {
@@ -147,7 +147,7 @@ public class GameView {
         this.opponent = opponent;
         this.mySymbol = mySymbol;
         boardCanvas.setMySymbol(mySymbol);
-        stage.setTitle("Barricade Game - Dau voi " + opponent);
+        stage.setTitle("Barricade Game - Đấu với " + opponent);
         chatArea.clear();
         resetToMoveMode();
         stage.show();
@@ -165,7 +165,7 @@ public class GameView {
 
     private void onCellClicked(int row, int col) {
         if (currentTurn != mySymbol) {
-            info("Chua den luot cua ban.");
+            info("Chưa đến lượt của bạn.");
             return;
         }
         app.getConnection().send(new Message(MessageType.MOVE_PAWN)
@@ -174,7 +174,7 @@ public class GameView {
 
     private void onWallClicked(int row, int col) {
         if (currentTurn != mySymbol) {
-            info("Chua den luot cua ban.");
+            info("Chưa đến lượt của bạn.");
             return;
         }
         String orientation = hRadio.isSelected() ? "H" : "V";
@@ -183,9 +183,9 @@ public class GameView {
     }
 
     private void surrender() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Ban chac chan muon dau hang?", ButtonType.YES, ButtonType.NO);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Bạn chắc chắn muốn đầu hàng?", ButtonType.YES, ButtonType.NO);
         alert.setHeaderText(null);
-        alert.setTitle("Xac nhan");
+        alert.setTitle("Xác nhận");
         styleAlert(alert);
         if (alert.showAndWait().orElse(ButtonType.NO) == ButtonType.YES) {
             app.getConnection().send(new Message(MessageType.SURRENDER).put("matchId", matchId));
@@ -196,7 +196,7 @@ public class GameView {
         String text = chatInput.getText().trim();
         if (text.isEmpty()) return;
         app.getConnection().send(new Message(MessageType.CHAT_MESSAGE).put("matchId", matchId).put("content", text));
-        chatArea.appendText("Ban: " + text + "\n");
+        chatArea.appendText("Bạn: " + text + "\n");
         chatInput.clear();
     }
 
@@ -220,7 +220,7 @@ public class GameView {
             shakeBoard();
             Alert alert = new Alert(Alert.AlertType.WARNING, msg.getString("reason"), ButtonType.OK);
             alert.setHeaderText(null);
-            alert.setTitle("Nuoc di khong hop le");
+            alert.setTitle("Nước đi không hợp lệ");
             styleAlert(alert);
             alert.showAndWait();
         }
@@ -239,7 +239,7 @@ public class GameView {
 
     public void onTurnTimeout(Message msg) {
         int skipped = msg.getInt("skippedPlayer");
-        chatArea.appendText("[He thong] Nguoi choi " + (skipped == mySymbol ? "ban" : opponent) + " het gio, bi bo luot.\n");
+        chatArea.appendText("[Hệ thống] Người chơi " + (skipped == mySymbol ? "bạn" : opponent) + " hết giờ, bị bỏ lượt.\n");
         BoardState state = msg.get("boardState");
         boardCanvas.updateState(state);
         currentTurn = msg.getInt("nextTurn");
@@ -258,11 +258,11 @@ public class GameView {
         resetToMoveMode();
 
         matchForceClosed = false;
-        String resultText = iWon ? "Chuc mung, ban da thang!" : (winner + " da thang tran nay.");
+        String resultText = iWon ? "Chúc mừng, bạn đã thắng!" : (winner + " đã thắng trận này.");
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                resultText + "\nBan co muon choi tiep khong?", ButtonType.YES, ButtonType.NO);
+                resultText + "\nBạn có muốn chơi tiếp không?", ButtonType.YES, ButtonType.NO);
         alert.setHeaderText(null);
-        alert.setTitle("Ket thuc tran dau");
+        alert.setTitle("Kết thúc trận đấu");
         styleAlert(alert);
         animateDialogEntrance(alert);
         gameOverAlert = alert;
@@ -277,13 +277,13 @@ public class GameView {
         app.getConnection().send(new Message(MessageType.REMATCH_RESPONSE).put("accept", accept));
 
         if (!accept) {
-            turnLabel.setText("Dang quay ve sanh...");
+            turnLabel.setText("Đang quay về sảnh...");
             turnLabel.setTextFill(Color.GRAY);
             timerLabel.setText("");
             return;
         }
 
-        turnLabel.setText("Dang cho doi thu...");
+        turnLabel.setText("Đang chờ đối thủ...");
         turnLabel.setTextFill(Color.GRAY);
         timerLabel.setText("");
 
@@ -326,17 +326,17 @@ public class GameView {
     }
 
     public void onOpponentDisconnected(String username) {
-        chatArea.appendText("[He thong] " + username + " bi mat ket noi, dang cho ket noi lai (15s)...\n");
+        chatArea.appendText("[Hệ thống] " + username + " bị mất kết nối, đang chờ kết nối lại (15s)...\n");
     }
 
     public void onOpponentReconnected(String username) {
-        chatArea.appendText("[He thong] " + username + " da ket noi lai.\n");
+        chatArea.appendText("[Hệ thống] " + username + " đã kết nối lại.\n");
     }
 
     private void updateBarricadeLabel(BoardState state) {
         int mine = mySymbol == 1 ? state.p1BarricadesLeft : state.p2BarricadesLeft;
         int theirs = mySymbol == 1 ? state.p2BarricadesLeft : state.p1BarricadesLeft;
-        barricadeLabel.setText("Barricade con lai - Ban: " + mine + " | " + opponent + ": " + theirs);
+        barricadeLabel.setText("Barricade còn lại - Bạn: " + mine + " | " + opponent + ": " + theirs);
     }
 
     private void resetToMoveMode() {
@@ -349,7 +349,7 @@ public class GameView {
             pendingReturnTimer.stop();
             pendingReturnTimer = null;
         }
-        turnLabel.setText(currentTurn == mySymbol ? "LUOT CUA BAN" : "Luot cua " + opponent);
+        turnLabel.setText(currentTurn == mySymbol ? "LƯỢT CỦA BẠN" : "Lượt của " + opponent);
         turnLabel.setTextFill(currentTurn == mySymbol ? Color.rgb(0, 130, 0) : Color.DARKGRAY);
         boardCanvas.setMyTurn(currentTurn == mySymbol);
     }
@@ -357,13 +357,13 @@ public class GameView {
     private void restartCountdown() {
         stopCountdown();
         secondsLeft = TURN_SECONDS;
-        timerLabel.setText("Con lai: " + secondsLeft + "s");
+        timerLabel.setText("Còn lại: " + secondsLeft + "s");
         timerBar.setProgress(1.0);
         updateTimerBarStyle(1.0);
         countdownTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             secondsLeft--;
             if (secondsLeft < 0) secondsLeft = 0;
-            timerLabel.setText("Con lai: " + secondsLeft + "s");
+            timerLabel.setText("Còn lại: " + secondsLeft + "s");
             double ratio = secondsLeft / (double) TURN_SECONDS;
             timerBar.setProgress(ratio);
             updateTimerBarStyle(ratio);

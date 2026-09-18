@@ -35,10 +35,10 @@ public class LobbyView {
     private final Stage stage = new Stage();
     private final ListView<PlayerInfo> onlineList = new ListView<>();
     private final Label onlineCountLabel = new Label();
-    private final Button inviteBtn = new Button("Thach dau");
-    private final Button rankingBtn = new Button("Bang xep hang");
-    private final Button historyBtn = new Button("Lich su dau");
-    private final Button logoutBtn = new Button("Dang xuat");
+    private final Button inviteBtn = new Button("Thách đấu");
+    private final Button rankingBtn = new Button("Bảng xếp hạng");
+    private final Button historyBtn = new Button("Lịch sử đấu");
+    private final Button logoutBtn = new Button("Đăng xuất");
 
     public LobbyView(ClientApp app) {
         this.app = app;
@@ -51,9 +51,9 @@ public class LobbyView {
         root.setPadding(new Insets(16));
 
         VBox header = new VBox(4);
-        Label title = new Label("BARRICADE GAME");
+        Label title = new Label("BARRICADE GAME - Nhóm 14");
         title.getStyleClass().add("app-title");
-        Label subtitle = new Label("Xin chao, " + app.getUsername() + "!");
+        Label subtitle = new Label("Xin chào, " + app.getUsername() + "!");
         subtitle.getStyleClass().add("app-subtitle");
         onlineCountLabel.getStyleClass().add("online-count");
         Region divider = new Region();
@@ -80,7 +80,7 @@ public class LobbyView {
 
         Scene scene = new Scene(root, 500, 560);
         scene.getStylesheets().add(getClass().getResource(CSS).toExternalForm());
-        stage.setTitle("Barricade Game - San choi (" + app.getUsername() + ")");
+        stage.setTitle("Barricade Game - Sảnh chơi (" + app.getUsername() + ")");
         stage.setScene(scene);
         stage.setOnCloseRequest(e -> System.exit(0));
     }
@@ -110,8 +110,8 @@ public class LobbyView {
                 boolean online = "ONLINE".equals(p.status);
                 dot.setFill(online ? Color.web("#6fcf6f") : Color.web("#8a8272"));
                 nameLabel.setText(p.username);
-                statsLabel.setText("Diem " + p.score + "   |   Thang " + p.wins + "   |   " + p.gamesPlayed + " tran   |   "
-                        + (online ? "San sang" : "Dang choi"));
+                statsLabel.setText("Điểm " + p.score + "   |   Thắng " + p.wins + "   |   " + p.gamesPlayed + " trận   |   "
+                        + (online ? "Sẵn sàng" : "Đang chơi"));
                 setGraphic(box);
             }
         };
@@ -121,11 +121,11 @@ public class LobbyView {
         PlayerInfo selected = onlineList.getSelectionModel().getSelectedItem();
         if (selected == null) return;
         if (selected.username.equals(app.getUsername())) {
-            info("Ban khong the tu thach dau chinh minh.");
+            info("Bạn không thể thách đấu chính mình.");
             return;
         }
         if (!"ONLINE".equals(selected.status)) {
-            info("Nguoi choi nay dang ban.");
+            info("Người chơi này đang bận.");
             return;
         }
         app.getConnection().send(new Message(MessageType.INVITE).put("targetUsername", selected.username));
@@ -142,7 +142,7 @@ public class LobbyView {
     public void updateOnlineList(Object onlineListObj) {
         List<PlayerInfo> list = (List<PlayerInfo>) onlineListObj;
         onlineList.getItems().setAll(list);
-        onlineCountLabel.setText(list.size() + " nguoi dang truc tuyen");
+        onlineCountLabel.setText(list.size() + " người chơi đang trực tuyến");
     }
 
     public void requestOnlineListRefresh() {
@@ -151,9 +151,9 @@ public class LobbyView {
 
     public void onInviteReceived(String fromUsername) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                fromUsername + " muon thach dau ban. Chap nhan?", ButtonType.YES, ButtonType.NO);
+                fromUsername + " muốn thách đâ bạn. Chấp nhận?", ButtonType.YES, ButtonType.NO);
         alert.setHeaderText(null);
-        alert.setTitle("Loi moi thach dau");
+        alert.setTitle("Lời mời thách đấu");
         styleAlert(alert);
         boolean accept = alert.showAndWait().orElse(ButtonType.NO) == ButtonType.YES;
         app.getConnection().send(new Message(MessageType.INVITE_RESPONSE)
@@ -161,11 +161,11 @@ public class LobbyView {
     }
 
     public void onInviteDeclined(String byUsername) {
-        info(byUsername + " da tu choi loi thach dau.");
+        info(byUsername + " đã từ chối lời thách đấu.");
     }
 
     public void onInviteFailed(String reason) {
-        Alert alert = new Alert(Alert.AlertType.WARNING, "Khong the thach dau: " + reason, ButtonType.OK);
+        Alert alert = new Alert(Alert.AlertType.WARNING, "Không thể thách đấu: " + reason, ButtonType.OK);
         alert.setHeaderText(null);
         styleAlert(alert);
         alert.showAndWait();
@@ -181,27 +181,27 @@ public class LobbyView {
         table.setItems(FXCollections.observableArrayList(list));
         table.setSelectionModel(null);
 
-        TableColumn<PlayerInfo, Integer> rankCol = new TableColumn<>("Hang");
+        TableColumn<PlayerInfo, Integer> rankCol = new TableColumn<>("Hạng");
         rankCol.setCellValueFactory(cd -> new ReadOnlyObjectWrapper<>(table.getItems().indexOf(cd.getValue()) + 1));
         rankCol.setSortable(false);
         rankCol.setPrefWidth(60);
 
-        TableColumn<PlayerInfo, String> nameCol = new TableColumn<>("Nguoi choi");
+        TableColumn<PlayerInfo, String> nameCol = new TableColumn<>("Người chơi");
         nameCol.setCellValueFactory(cd -> new ReadOnlyStringWrapper(cd.getValue().username));
         nameCol.setSortable(false);
         nameCol.setPrefWidth(150);
 
-        TableColumn<PlayerInfo, Integer> scoreCol = new TableColumn<>("Diem");
+        TableColumn<PlayerInfo, Integer> scoreCol = new TableColumn<>("Điểm");
         scoreCol.setCellValueFactory(cd -> new ReadOnlyObjectWrapper<>(cd.getValue().score));
         scoreCol.setSortable(false);
         scoreCol.setPrefWidth(80);
 
-        TableColumn<PlayerInfo, Integer> winsCol = new TableColumn<>("Thang");
+        TableColumn<PlayerInfo, Integer> winsCol = new TableColumn<>("Thắng");
         winsCol.setCellValueFactory(cd -> new ReadOnlyObjectWrapper<>(cd.getValue().wins));
         winsCol.setSortable(false);
         winsCol.setPrefWidth(80);
 
-        TableColumn<PlayerInfo, Integer> gamesCol = new TableColumn<>("So tran");
+        TableColumn<PlayerInfo, Integer> gamesCol = new TableColumn<>("Số trận");
         gamesCol.setCellValueFactory(cd -> new ReadOnlyObjectWrapper<>(cd.getValue().gamesPlayed));
         gamesCol.setSortable(false);
         gamesCol.setPrefWidth(80);
@@ -224,12 +224,12 @@ public class LobbyView {
         VBox content = new VBox(10);
         content.getStyleClass().add("root");
         content.setPadding(new Insets(16));
-        Label header = new Label("BANG XEP HANG");
+        Label header = new Label("BẢNG XẾP HẠNG");
         header.getStyleClass().add("app-title");
         content.getChildren().add(header);
 
         if (list.isEmpty()) {
-            Label empty = new Label("Chua co du lieu.");
+            Label empty = new Label("Chưa có dữ liệu.");
             empty.getStyleClass().add("empty-hint");
             content.getChildren().add(empty);
         } else {
@@ -237,7 +237,7 @@ public class LobbyView {
             VBox.setVgrow(table, Priority.ALWAYS);
         }
 
-        showInfoWindow("Bang xep hang", content, 460, 480);
+        showInfoWindow("Bảng xếp hạng", content, 460, 480);
     }
 
     // ---------- LICH SU DAU (ListView styled) ----------
@@ -249,12 +249,12 @@ public class LobbyView {
         VBox content = new VBox(10);
         content.getStyleClass().add("root");
         content.setPadding(new Insets(16));
-        Label header = new Label("LICH SU DAU");
+        Label header = new Label("LỊCH SỬ ĐẤU");
         header.getStyleClass().add("app-title");
         content.getChildren().add(header);
 
         if (list.isEmpty()) {
-            Label empty = new Label("Ban chua co tran dau nao.");
+            Label empty = new Label("Bạn chưa có trận đấu nào.");
             empty.getStyleClass().add("empty-hint");
             content.getChildren().add(empty);
         } else {
@@ -264,7 +264,7 @@ public class LobbyView {
             VBox.setVgrow(listView, Priority.ALWAYS);
         }
 
-        showInfoWindow("Lich su dau", content, 460, 480);
+        showInfoWindow("Lịch sử đấu", content, 460, 480);
     }
 
     private ListCell<String> createHistoryCell() {
@@ -294,7 +294,7 @@ public class LobbyView {
                 Label opponentLabel = new Label("vs " + opponent);
                 opponentLabel.getStyleClass().add("history-opponent");
 
-                Label badge = new Label(won ? "THANG" : "THUA");
+                Label badge = new Label(won ? "THẮNG" : "THUA");
                 badge.getStyleClass().addAll("history-badge", won ? "history-win" : "history-lose");
 
                 Region spacer = new Region();
@@ -318,7 +318,7 @@ public class LobbyView {
         popup.initOwner(stage);
         popup.setTitle(title);
 
-        Button closeBtn = new Button("Dong");
+        Button closeBtn = new Button("Đóng");
         closeBtn.setOnAction(e -> popup.close());
         HBox footer = new HBox(closeBtn);
         footer.setAlignment(Pos.CENTER_RIGHT);
