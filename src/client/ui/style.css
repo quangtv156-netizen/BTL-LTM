@@ -1,0 +1,232 @@
+.root {
+    -fx-background-color: linear-gradient(to bottom right, #2c2a26, #1f1d1a);
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.label {
+    -fx-text-fill: #e8ddc7;
+    -fx-font-size: 13px;
+}
+
+.error-label {
+    -fx-text-fill: #ff6b6b;
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-background-color: linear-gradient(to bottom, #d8a24a, #b9812e);
+    -fx-text-fill: #2c2a26;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 8 18;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.45), 4, 0, 0, 2);
+}
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #e8b45c, #c9913c);
+}
+.button:pressed {
+    -fx-background-color: #a97426;
+}
+.button:disabled {
+    -fx-opacity: 0.5;
+}
+
+.text-field, .password-field {
+    -fx-background-color: #3a372f;
+    -fx-text-fill: #f0e6d2;
+    -fx-prompt-text-fill: #8a8272;
+    -fx-background-radius: 6;
+    -fx-border-color: #6b5d43;
+    -fx-border-radius: 6;
+    -fx-padding: 6;
+}
+
+.list-view {
+    -fx-background-color: #2c2a26;
+    -fx-border-color: #6b5d43;
+    -fx-border-radius: 6;
+}
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e8ddc7;
+    -fx-padding: 10 12;
+    -fx-border-color: transparent transparent #38352d transparent;
+    -fx-border-width: 0 0 1 0;
+}
+.list-cell:filled:selected {
+    -fx-background-color: #6b5133;
+}
+.list-cell:filled:hover {
+    -fx-background-color: #3a372f;
+}
+.list-cell:empty {
+    -fx-border-width: 0;
+}
+
+.text-area, .text-area .content {
+    -fx-control-inner-background: #2c2a26;
+    -fx-text-fill: #e8ddc7;
+    -fx-background-radius: 6;
+    -fx-border-color: #6b5d43;
+    -fx-border-radius: 6;
+}
+
+.titled-pane > .title {
+    -fx-background-color: #3a372f;
+    -fx-text-fill: #f0c987;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6 6 0 0;
+    -fx-border-color: #6b5d43;
+}
+.titled-pane > *.content {
+    -fx-background-color: #262420;
+    -fx-border-color: #6b5d43;
+}
+
+.radio-button {
+    -fx-text-fill: #e8ddc7;
+}
+.radio-button > .radio {
+    -fx-background-color: #3a372f;
+    -fx-border-color: #6b5d43;
+}
+.radio-button:selected > .radio > .dot {
+    -fx-background-color: #d8a24a;
+}
+
+.progress-bar {
+    -fx-min-height: 14px;
+    -fx-pref-height: 14px;
+}
+.progress-bar > .track {
+    -fx-background-color: #3a372f;
+    -fx-background-radius: 8;
+}
+.progress-bar > .bar {
+    -fx-background-insets: 2;
+    -fx-background-radius: 6;
+}
+.timer-progress { -fx-accent: #6fcf6f; }
+.timer-progress-warn { -fx-accent: #e0a030; }
+.timer-progress-danger { -fx-accent: #e05050; }
+
+.dialog-pane {
+    -fx-background-color: #2c2a26;
+}
+.dialog-pane > .content.label {
+    -fx-text-fill: #e8ddc7;
+    -fx-font-size: 13px;
+}
+.dialog-pane > .header-panel {
+    -fx-background-color: #3a372f;
+}
+.dialog-pane .header-panel .label {
+    -fx-text-fill: #f0c987;
+    -fx-font-weight: bold;
+}
+.dialog-pane .button-bar .button {
+    -fx-background-color: linear-gradient(to bottom, #d8a24a, #b9812e);
+    -fx-text-fill: #2c2a26;
+}
+
+/* ===== Lobby header ===== */
+.app-title {
+    -fx-text-fill: #f0c987;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+.app-subtitle {
+    -fx-text-fill: #b9ad91;
+    -fx-font-size: 13px;
+}
+.online-count {
+    -fx-text-fill: #6fcf6f;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+.section-divider {
+    -fx-background-color: #6b5d43;
+    -fx-pref-height: 1;
+    -fx-max-height: 1;
+}
+
+/* ===== Player list cell ===== */
+.player-name {
+    -fx-text-fill: #f0e6d2;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+.player-stats {
+    -fx-text-fill: #a89b7c;
+    -fx-font-size: 12px;
+}
+
+/* ===== TableView (Bang xep hang) ===== */
+.table-view {
+    -fx-background-color: #2c2a26;
+    -fx-border-color: #6b5d43;
+    -fx-border-radius: 6;
+}
+.table-view .column-header-background {
+    -fx-background-color: #3a372f;
+    -fx-background-radius: 6 6 0 0;
+}
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent #6b5d43 transparent transparent;
+    -fx-size: 34px;
+}
+.table-view .column-header .label {
+    -fx-text-fill: #f0c987;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+.table-row-cell {
+    -fx-background-color: #2c2a26;
+    -fx-text-fill: #e8ddc7;
+    -fx-border-color: transparent transparent #38352d transparent;
+}
+.table-row-cell:odd {
+    -fx-background-color: #302d27;
+}
+.table-row-cell:selected {
+    -fx-background-color: #6b5133;
+}
+.table-view .table-cell {
+    -fx-text-fill: #e8ddc7;
+    -fx-alignment: CENTER;
+    -fx-font-size: 13px;
+}
+.table-row-cell.rank-gold .table-cell { -fx-text-fill: #ffd75e; -fx-font-weight: bold; }
+.table-row-cell.rank-silver .table-cell { -fx-text-fill: #d7d7d7; -fx-font-weight: bold; }
+.table-row-cell.rank-bronze .table-cell { -fx-text-fill: #d99a5e; -fx-font-weight: bold; }
+
+/* ===== History list ===== */
+.history-badge {
+    -fx-padding: 3 10;
+    -fx-background-radius: 12;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+.history-win {
+    -fx-background-color: #2e5e3a;
+    -fx-text-fill: #8fe0a0;
+}
+.history-lose {
+    -fx-background-color: #5e2e2e;
+    -fx-text-fill: #e08f8f;
+}
+.history-opponent {
+    -fx-text-fill: #f0e6d2;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+.history-time {
+    -fx-text-fill: #8a8272;
+    -fx-font-size: 11px;
+}
+.empty-hint {
+    -fx-text-fill: #8a8272;
+    -fx-font-style: italic;
+}
